@@ -23,6 +23,7 @@ public class JwtUserDetailsService implements UserDetailsService {
         System.out.println(userEntity.getFullname());
         System.out.println(userEntity.getAddress());
         System.out.println(userEntity.getPassword());
+        System.out.println(userEntity.getRole().getName());
         if(userEntity != null) {
             return new User(userEntity.getUsername(), userEntity.getPassword(), new ArrayList<>());
         } else {

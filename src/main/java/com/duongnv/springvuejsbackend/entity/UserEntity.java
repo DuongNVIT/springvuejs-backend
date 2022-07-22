@@ -21,16 +21,13 @@ public class UserEntity extends BaseEntity{
     @Column(name = "status")
     private int status;
 
-    @Column(name = "roleid")
-    private Long roleid;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "roleid")
+    private RoleEntity role;
 
     @Column(name = "address")
     private String address;
 
     @Column(name = "phone")
     private String phone;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "roleid")
-    private RoleEntity role;
 }
