@@ -1,8 +1,6 @@
 package com.duongnv.springvuejsbackend.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "product")
@@ -22,4 +20,8 @@ public class ProductEntity extends BaseEntity{
 
     @Column(name = "rate")
     private int rate;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "categoryid")
+    private CategoryEntity category;
 }

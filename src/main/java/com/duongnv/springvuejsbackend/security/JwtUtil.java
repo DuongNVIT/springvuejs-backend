@@ -21,7 +21,6 @@ public class JwtUtil implements Serializable {
     private String secretKey;
 
     public String getUsernameFromToken(String token) {
-//        return getClaimFromToken(token, Claims::getSubject);
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
@@ -30,7 +29,7 @@ public class JwtUtil implements Serializable {
     }
 
     private boolean isTokenExpired(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getExpiration().before(new Date());
+        return getExpirationDateFromToken(token).before(new Date());
     }
 
     private String doGenerateToken(Map<String, Object> claims, String subject) {
@@ -38,7 +37,7 @@ public class JwtUtil implements Serializable {
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRED_TIME + 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRED_TIME * 1000))
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
     }

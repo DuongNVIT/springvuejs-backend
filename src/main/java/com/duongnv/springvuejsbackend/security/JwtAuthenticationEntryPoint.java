@@ -1,5 +1,9 @@
 package com.duongnv.springvuejsbackend.security;
 
+import com.duongnv.springvuejsbackend.exception.WrongUsernamPasswordException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -8,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Serializable {
@@ -18,7 +24,18 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Se
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
 
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+        throw authException;
+//        Map<String, String> error  = new HashMap<>();
+//        if(authException instanceof BadCredentialsException) {
+//            error.put("message" , "Wrong username or password");
+//            throw new WrongUsernamPasswordException("Sai mat khau");
+//        } else if(authException instanceof InsufficientAuthenticationException) {
+//            error.put("message", "Unauthorize");
+//        }
+//        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//        System.out.println(authException);
+//        System.out.println(authException.getMessage());
+//        new ObjectMapper().writeValue(response.getOutputStream(), error);
     }
 }
 

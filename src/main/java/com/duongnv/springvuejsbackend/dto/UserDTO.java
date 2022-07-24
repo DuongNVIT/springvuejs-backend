@@ -1,7 +1,9 @@
 package com.duongnv.springvuejsbackend.dto;
 
-public class UserDTO {
+import lombok.Data;
+
+@Data
+public class UserDTO extends AbstractDTO{
     private String username;
     private String fullname;
-
 }
