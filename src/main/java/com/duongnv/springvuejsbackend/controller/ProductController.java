@@ -25,8 +25,11 @@ public class ProductController {
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<ProductEntity> pageL = null;
+        System.out.println(page);
+        System.out.println(size);
         pageL = (Page<ProductEntity>) productRepository.findAll(pageable);
         System.out.println(pageL.getTotalElements());
+        System.out.println(pageL.getContent());
         System.out.println();
         return (List<ProductEntity>) pageL.getContent();
     }

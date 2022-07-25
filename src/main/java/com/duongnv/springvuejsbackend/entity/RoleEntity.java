@@ -1,5 +1,6 @@
 package com.duongnv.springvuejsbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -21,5 +22,6 @@ public class RoleEntity extends BaseEntity{
     private String code;
 
     @OneToMany(mappedBy = "role")
+    @JsonIgnore
     private List<UserEntity> users = new ArrayList<>();
 }

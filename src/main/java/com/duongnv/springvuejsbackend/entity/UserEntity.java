@@ -1,5 +1,6 @@
 package com.duongnv.springvuejsbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,11 +19,15 @@ public class UserEntity extends BaseEntity{
     @Column(name = "fullname")
     private String fullname;
 
+    @Column(name = "email")
+    private String email;
+
     @Column(name = "status")
     private int status;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "roleid")
+    @JsonIgnore
     private RoleEntity role;
 
     @Column(name = "address")

@@ -5,10 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class MailDemo {
-    private String username;
-    private String email;
-    private String fullname;
+@NoArgsConstructor
+public class RoleDTO {
+    private Long id = 2l;
+    private String name = "User";
+    private String code = "user";
 }

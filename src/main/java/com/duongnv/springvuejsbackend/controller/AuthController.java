@@ -1,5 +1,10 @@
 package com.duongnv.springvuejsbackend.controller;
 
+import com.duongnv.springvuejsbackend.dto.RoleDTO;
+import com.duongnv.springvuejsbackend.dto.UserDTO;
+import com.duongnv.springvuejsbackend.entity.RoleEntity;
+import com.duongnv.springvuejsbackend.service.IUserService;
+import com.duongnv.springvuejsbackend.service.impl.UserService;
 import com.duongnv.springvuejsbackend.utils.PasswordUtil;
 import com.duongnv.springvuejsbackend.dto.MailDemo;
 import com.duongnv.springvuejsbackend.exception.UnauthorizeException;
@@ -15,11 +20,19 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api")
 @CrossOrigin
 public class AuthController {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private IUserService userService;
 
     @Autowired
     private PasswordUtil passwordUtil;
@@ -36,32 +49,41 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtTokenUtil;
 
-    @GetMapping("/api")
+    @GetMapping("/duong")
     public String test() {
         return "Nguyễn Văn Đương";
     }
 
-    @GetMapping("/demo")
+    @GetMapping("/demouser")
     @PreAuthorize("hasAuthority('user')")
     public String demo() {
-        return "Demo autho";
+        return "Demo user";
     }
 
-    @GetMapping("/demo2")
+    @GetMapping("/demoadmin")
     @PreAuthorize("hasAuthority('admin')")
     public String demoadmin() {
-        return "Demo autho";
+        return "Demo admin";
     }
 
 
-    @PostMapping("/authenticate")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest request)
+    @PostMapping("/signin")
+    public ResponseEntity<?> signin(@RequestBody JwtRequest request)
             throws Exception {
         authenticate(request.getUsername(), request.getPassword());
         UserDetails userDetails = jwtUserDetailService.loadUserByUsername(request.getUsername());
         String token = jwtTokenUtil.generateToken(userDetails);
         System.out.println(44 + " authcontroller");
         return ResponseEntity.ok().body(new JwtResponse(token));
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<?> signup(@RequestBody UserDTO userDTO) {
+        String pass = passwordUtil.generateRandomPassword();
+        userDTO.setPassword(passwordEncoder.encode(pass));
+        userService.save(userDTO);
+        sendMailService.sendMail(userDTO, pass);
+        return ResponseEntity.ok("Đăng ký thành công");
     }
 
     private void authenticate(String username, String password) throws Exception {
@@ -76,13 +98,5 @@ public class AuthController {
         } catch (UsernameNotFoundException e) {
             throw new WrongUsernamPasswordException("Sai tên đăng nhập hoặc mật khẩu");
         }
-    }
-
-    @PostMapping("/dangky")
-    public String dangky(@RequestBody MailDemo mailDemo) {
-        String pass = passwordUtil.generateRandomPassword();
-        sendMailService.sendMail(mailDemo, pass);
-        System.out.println(pass);
-        return "Gửi thành công password " + pass;
     }
 }

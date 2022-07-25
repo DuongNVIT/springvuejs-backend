@@ -1,7 +1,8 @@
 package com.duongnv.springvuejsbackend.service;
 
 import com.duongnv.springvuejsbackend.dto.MailDemo;
+import com.duongnv.springvuejsbackend.dto.UserDTO;
 
 public interface ISendEmailService {
-    void sendMail(MailDemo mailDemo, String password);
+    void sendMail(UserDTO mailDemo, String password);
 }

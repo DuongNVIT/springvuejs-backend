@@ -32,6 +32,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         try {
+            if(request.getServletPath().startsWith("/")) {
+                chain.doFilter(request, response);
+                return;
+            }
             final String requestTokenHeader = request.getHeader("Authorization");
 
             String username = null;
@@ -92,13 +96,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             chain.doFilter(request, response);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            ResponseDTO responseDTO = new ResponseDTO(
-                    "Unauthorize",
-                    HttpStatus.UNAUTHORIZED.value(),
-                    System.currentTimeMillis()
-            );
-            new ObjectMapper().writeValue(response.getOutputStream(), responseDTO);
+//            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+//            ResponseDTO responseDTO = new ResponseDTO(
+//                    "Unauthorize",
+//                    HttpStatus.UNAUTHORIZED.value(),
+//                    System.currentTimeMillis()
+//            );
+//            new ObjectMapper().writeValue(response.getOutputStream(), responseDTO);
         }
     }
 }
