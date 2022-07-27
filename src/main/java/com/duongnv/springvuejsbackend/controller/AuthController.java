@@ -3,6 +3,7 @@ package com.duongnv.springvuejsbackend.controller;
 import com.duongnv.springvuejsbackend.dto.RoleDTO;
 import com.duongnv.springvuejsbackend.dto.UserDTO;
 import com.duongnv.springvuejsbackend.entity.RoleEntity;
+import com.duongnv.springvuejsbackend.exception.DuplicateAccountException;
 import com.duongnv.springvuejsbackend.service.IUserService;
 import com.duongnv.springvuejsbackend.service.impl.UserService;
 import com.duongnv.springvuejsbackend.utils.PasswordUtil;
@@ -14,6 +15,7 @@ import com.duongnv.springvuejsbackend.security.JwtResponse;
 import com.duongnv.springvuejsbackend.security.JwtUserDetailsService;
 import com.duongnv.springvuejsbackend.security.JwtUtil;
 import com.duongnv.springvuejsbackend.service.impl.SendMailService;
+import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +24,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -72,18 +77,23 @@ public class AuthController {
             throws Exception {
         authenticate(request.getUsername(), request.getPassword());
         UserDetails userDetails = jwtUserDetailService.loadUserByUsername(request.getUsername());
+        UserDTO userDTO = userService.findByUsername(request.getUsername());
         String token = jwtTokenUtil.generateToken(userDetails);
-        System.out.println(44 + " authcontroller");
-        return ResponseEntity.ok().body(new JwtResponse(token));
+        return ResponseEntity.ok().body(new JwtResponse(userDTO.getId(), userDTO.getUsername(), token));
     }
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody UserDTO userDTO) {
-        String pass = passwordUtil.generateRandomPassword();
-        userDTO.setPassword(passwordEncoder.encode(pass));
-        userService.save(userDTO);
-        sendMailService.sendMail(userDTO, pass);
-        return ResponseEntity.ok("Đăng ký thành công");
+        try {
+            String pass = passwordUtil.generateRandomPassword();
+            userDTO.setPassword(passwordEncoder.encode(pass));
+            userService.save(userDTO);
+            sendMailService.sendMail(userDTO, pass);
+            return ResponseEntity.ok("Đăng ký thành công");
+        } catch (DuplicateAccountException e) {
+            System.out.println("Lỗi controller");
+            throw e;
+        }
     }
 
     private void authenticate(String username, String password) throws Exception {

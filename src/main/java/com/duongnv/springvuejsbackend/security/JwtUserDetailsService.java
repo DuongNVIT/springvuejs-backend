@@ -23,11 +23,6 @@ public class JwtUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findByUsername(username);
-//        System.out.println(userEntity.getFullname());
-//        System.out.println(userEntity.getAddress());
-//        System.out.println(userEntity.getPassword());
-//        System.out.println(userEntity.getRole().getName());
-
         if(userEntity != null) {
             Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
             authorities.add(new SimpleGrantedAuthority(userEntity.getRole().getName()));
@@ -35,13 +30,6 @@ public class JwtUserDetailsService implements UserDetailsService {
         } else {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
-//        if ("duongnv".equals(username)) {
-//            System.out.println("loadbyusernam");
-//            return new User("duongnv", "$2a$10$slYQmyNdGzTn7ZLBXBChFOC9f6kFjAqPhccnP6DxlWXx2lPk1C3G6", new ArrayList<>());
-//        } else {
-//            throw new UsernameNotFoundException("User not found with username: " + username);
-//        }
-
     }
 
 }

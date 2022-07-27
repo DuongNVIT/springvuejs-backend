@@ -1,6 +1,6 @@
 package com.duongnv.springvuejsbackend.security;
 
-import com.duongnv.springvuejsbackend.dto.ResponseDTO;
+import com.duongnv.springvuejsbackend.dto.ErrorResponseDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,13 +96,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             chain.doFilter(request, response);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-//            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-//            ResponseDTO responseDTO = new ResponseDTO(
-//                    "Unauthorize",
-//                    HttpStatus.UNAUTHORIZED.value(),
-//                    System.currentTimeMillis()
-//            );
-//            new ObjectMapper().writeValue(response.getOutputStream(), responseDTO);
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            ErrorResponseDTO responseDTO = new ErrorResponseDTO(
+                    "Unauthorize",
+                    HttpStatus.UNAUTHORIZED.value(),
+                    System.currentTimeMillis()
+            );
+            new ObjectMapper().writeValue(response.getOutputStream(), responseDTO);
         }
     }
 }

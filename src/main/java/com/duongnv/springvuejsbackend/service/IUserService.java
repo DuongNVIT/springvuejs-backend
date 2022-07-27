@@ -5,4 +5,5 @@ import com.duongnv.springvuejsbackend.entity.UserEntity;
 
 public interface IUserService {
     UserEntity save(UserDTO userDTO);
+    UserDTO findByUsername(String username);
 }
