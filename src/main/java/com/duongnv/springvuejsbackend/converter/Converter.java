@@ -1,7 +1,10 @@
 package com.duongnv.springvuejsbackend.converter;
 
-public interface Converter<T, K> {
-    K entityToDTO(T t);
-    T dtoToEntity(K k);
-    T entityToEntity(T t, K k);
+import org.modelmapper.ModelMapper;
+
+public abstract class Converter<T, K> {
+    protected ModelMapper modelMapper = new ModelMapper();
+    abstract K entityToDTO(T t);
+    abstract T dtoToEntity(K k);
+    abstract T entityToEntity(T t, K k);
 }

@@ -6,7 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CategoryConverter implements Converter<CategoryEntity, CategoryDTO> {
+public class CategoryConverter extends Converter<CategoryEntity, CategoryDTO> {
 
     private ModelMapper modelMapper = new ModelMapper();
 

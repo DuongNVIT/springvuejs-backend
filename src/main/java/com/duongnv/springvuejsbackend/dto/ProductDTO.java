@@ -7,9 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 public class ProductDTO extends AbstractDTO{
     private String name;
-    private int olePrice;
-    private int newPrice;
+    private int oleprice;
+    private int newprice;
     private String thumbnail;
     private String rate;
     private CategoryDTO category;
+    private String categorycode;
 }

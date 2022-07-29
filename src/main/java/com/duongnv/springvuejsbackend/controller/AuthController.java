@@ -2,8 +2,11 @@ package com.duongnv.springvuejsbackend.controller;
 
 import com.duongnv.springvuejsbackend.dto.RoleDTO;
 import com.duongnv.springvuejsbackend.dto.UserDTO;
+import com.duongnv.springvuejsbackend.entity.ProductEntity;
 import com.duongnv.springvuejsbackend.entity.RoleEntity;
 import com.duongnv.springvuejsbackend.exception.DuplicateAccountException;
+import com.duongnv.springvuejsbackend.repository.ProductRepository;
+import com.duongnv.springvuejsbackend.repository.UserRepository;
 import com.duongnv.springvuejsbackend.service.IUserService;
 import com.duongnv.springvuejsbackend.service.impl.UserService;
 import com.duongnv.springvuejsbackend.utils.PasswordUtil;
@@ -26,6 +29,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -44,6 +48,12 @@ public class AuthController {
 
     @Autowired
     private SendMailService sendMailService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @Autowired
     private JwtUserDetailsService jwtUserDetailService;
@@ -75,11 +85,27 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<?> signin(@RequestBody JwtRequest request)
             throws Exception {
-        authenticate(request.getUsername(), request.getPassword());
-        UserDetails userDetails = jwtUserDetailService.loadUserByUsername(request.getUsername());
-        UserDTO userDTO = userService.findByUsername(request.getUsername());
-        String token = jwtTokenUtil.generateToken(userDetails);
-        return ResponseEntity.ok().body(new JwtResponse(userDTO.getId(), userDTO.getUsername(), token));
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+            UserDetails userDetails = jwtUserDetailService.loadUserByUsername(request.getUsername());
+            UserDTO userDTO = userService.findByUsername(request.getUsername());
+            System.out.println(userDTO.getProducts());
+            String token = jwtTokenUtil.generateToken(userDetails);
+            System.out.println(userRepository.findByStartLetter("Nguyễn").getFullname());
+            List<ProductEntity> products = productRepository.findUserProduct(2l);
+            for (ProductEntity p : products) {
+                System.out.println(p.getName());
+            }
+            return ResponseEntity.ok().body(new JwtResponse(userDTO.getId(), userDTO.getRole().getName(), userDTO.getUsername(), token));
+        } catch (BadCredentialsException e) {
+            throw new WrongUsernamPasswordException("Sai tên đăng nhập hoặc mật khẩu");
+        } catch (InsufficientAuthenticationException e) {
+            throw new UnauthorizeException("Unauthorize!");
+        } catch (UsernameNotFoundException e) {
+            throw new WrongUsernamPasswordException("Sai tên đăng nhập hoặc mật khẩu");
+        } catch (DisabledException e) {
+            throw new Exception("USER_DISABLED", e);
+        }
     }
 
     @PostMapping("/signup")
@@ -91,22 +117,8 @@ public class AuthController {
             sendMailService.sendMail(userDTO, pass);
             return ResponseEntity.ok("Đăng ký thành công");
         } catch (DuplicateAccountException e) {
-            System.out.println("Lỗi controller");
+            System.out.println("Đăng ký lỗi");
             throw e;
-        }
-    }
-
-    private void authenticate(String username, String password) throws Exception {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        } catch (DisabledException e) {
-            throw new Exception("USER_DISABLED", e);
-        } catch (BadCredentialsException e) {
-            throw new WrongUsernamPasswordException("Sai ten dang nhap hoac mat khau");
-        } catch (InsufficientAuthenticationException e) {
-            throw new UnauthorizeException("Unauthorize!");
-        } catch (UsernameNotFoundException e) {
-            throw new WrongUsernamPasswordException("Sai tên đăng nhập hoặc mật khẩu");
         }
     }
 }

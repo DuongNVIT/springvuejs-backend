@@ -24,4 +24,5 @@ public class CategoryController {
         System.out.println("vào đây");
         return categoryService.findAll();
     }
+
 }

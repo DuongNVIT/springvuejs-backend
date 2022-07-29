@@ -29,4 +29,10 @@ public class CategoryService implements ICategoryService {
         }
         return categoryDTOS;
     }
+
+    @Override
+    public CategoryDTO findByCategoryCode(String code) {
+        return categoryConverter.entityToDTO(categoryRepository.findByCode(code));
+    }
+
 }

@@ -6,7 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserConverter implements Converter<UserEntity, UserDTO> {
+public class UserConverter extends Converter<UserEntity, UserDTO> {
 
     private ModelMapper modelMapper = new ModelMapper();
 

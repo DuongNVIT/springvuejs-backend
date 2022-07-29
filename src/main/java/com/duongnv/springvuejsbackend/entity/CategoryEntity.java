@@ -18,7 +18,6 @@ public class CategoryEntity extends BaseEntity{
     @Column(name = "code")
     private String code;
 
-
     @JsonIgnore
     @OneToMany(mappedBy = "category")
     List<ProductEntity> products = new ArrayList<>();
