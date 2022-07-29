@@ -2,6 +2,7 @@ package com.duongnv.springvuejsbackend.controller;
 
 import com.duongnv.springvuejsbackend.dto.RoleDTO;
 import com.duongnv.springvuejsbackend.dto.UserDTO;
+import com.duongnv.springvuejsbackend.entity.BookSlim;
 import com.duongnv.springvuejsbackend.entity.ProductEntity;
 import com.duongnv.springvuejsbackend.entity.RoleEntity;
 import com.duongnv.springvuejsbackend.exception.DuplicateAccountException;
@@ -92,6 +93,9 @@ public class AuthController {
             System.out.println(userDTO.getProducts());
             String token = jwtTokenUtil.generateToken(userDetails);
             System.out.println(userRepository.findByStartLetter("Nguyễn").getFullname());
+            BookSlim s = productRepository.findById(1l, BookSlim.class);
+            System.out.println("===========");
+            System.out.println(s);
             List<ProductEntity> products = productRepository.findUserProduct(2l);
             for (ProductEntity p : products) {
                 System.out.println(p.getName());
