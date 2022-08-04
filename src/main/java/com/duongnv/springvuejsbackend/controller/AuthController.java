@@ -6,6 +6,7 @@ import com.duongnv.springvuejsbackend.entity.BookSlim;
 import com.duongnv.springvuejsbackend.entity.ProductEntity;
 import com.duongnv.springvuejsbackend.entity.RoleEntity;
 import com.duongnv.springvuejsbackend.exception.DuplicateAccountException;
+import com.duongnv.springvuejsbackend.exception.ResponseE;
 import com.duongnv.springvuejsbackend.repository.ProductRepository;
 import com.duongnv.springvuejsbackend.repository.UserRepository;
 import com.duongnv.springvuejsbackend.service.IUserService;
@@ -64,6 +65,16 @@ public class AuthController {
 
     @Autowired
     private JwtUtil jwtTokenUtil;
+
+    @GetMapping("/responsestatus")
+    public String status() {
+        double b = Math.random();
+        System.out.println(b);
+        if(b < 0.5) {
+            throw new ResponseE();
+        }
+        return "response status";
+    }
 
     @GetMapping("/duong")
     public String test() {

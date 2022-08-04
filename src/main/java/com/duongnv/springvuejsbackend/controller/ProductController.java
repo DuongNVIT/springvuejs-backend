@@ -64,7 +64,7 @@ public class ProductController {
         ProductEntity product = new ProductEntity();
         product.setName(productDTO.getName());
         product.setNewprice(productDTO.getNewprice());
-        product.setOldprice(productDTO.getOleprice());
+        product.setOldprice(productDTO.getOldprice());
         product.setCategory(categoryConverter.dtoToEntity(category));
         product.setThumbnail((productDTO.getThumbnail()));
         product = productRepository.save(product);
