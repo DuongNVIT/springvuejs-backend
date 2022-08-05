@@ -19,7 +19,7 @@ public class UserEntity extends BaseEntity{
     private String password;
 
     @Column(name = "fullname")
-    private String fullname;
+    private String fullName;
 
     @Column(name = "email")
     private String email;

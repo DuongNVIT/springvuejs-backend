@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MailDemo {
-    private String username;
-    private String email;
-    private String fullname;
+public class ErrorDTO {
+    private String message;
+    private int status;
 }

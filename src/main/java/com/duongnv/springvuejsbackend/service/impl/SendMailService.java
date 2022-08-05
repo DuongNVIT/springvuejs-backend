@@ -1,6 +1,5 @@
 package com.duongnv.springvuejsbackend.service.impl;
 
-import com.duongnv.springvuejsbackend.dto.MailDemo;
 import com.duongnv.springvuejsbackend.dto.UserDTO;
 import com.duongnv.springvuejsbackend.service.ISendEmailService;
 import org.springframework.beans.factory.annotation.Autowired;

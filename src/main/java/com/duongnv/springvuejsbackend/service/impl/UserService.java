@@ -21,13 +21,8 @@ public class UserService implements IUserService {
 
     @Override
     public UserEntity save(UserDTO userDTO) {
-        try {
-            System.out.println("Lưu người dùng");
-            return userRepository.save(userConverter.dtoToEntity(userDTO));
-        } catch (DataIntegrityViolationException e) {
-            System.out.println("Trùng tên");
-            throw new DuplicateAccountException("Trùng email hoặc tên đăng nhập");
-        }
+        System.out.println("Lưu người dùng");
+        return userRepository.save(userConverter.dtoToEntity(userDTO));
     }
 
     @Override

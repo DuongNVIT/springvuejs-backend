@@ -60,11 +60,11 @@ public class ProductController {
     @PostMapping("/products")
     public ProductDTO createProducts(@RequestBody ProductDTO productDTO) {
         System.out.println(58);
-        CategoryDTO category = categoryService.findByCategoryCode(productDTO.getCategorycode());
+        CategoryDTO category = categoryService.findByCategoryCode(productDTO.getCategoryCode());
         ProductEntity product = new ProductEntity();
         product.setName(productDTO.getName());
-        product.setNewprice(productDTO.getNewprice());
-        product.setOldprice(productDTO.getOldprice());
+        product.setNewPrice(productDTO.getNewPrice());
+        product.setOldPrice(productDTO.getOldPrice());
         product.setCategory(categoryConverter.dtoToEntity(category));
         product.setThumbnail((productDTO.getThumbnail()));
         product = productRepository.save(product);

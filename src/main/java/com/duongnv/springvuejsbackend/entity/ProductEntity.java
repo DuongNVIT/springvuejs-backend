@@ -25,10 +25,10 @@ public class ProductEntity extends BaseEntity{
     private String name;
 
     @Column(name = "oldprice")
-    private int oldprice;
+    private int oldPrice;
 
     @Column(name = "newprice")
-    private int newprice;
+    private int newPrice;
 
     @Column(name = "rate")
     private Integer rate;

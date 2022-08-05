@@ -1,6 +1,6 @@
 package com.duongnv.springvuejsbackend.security;
 
-import com.duongnv.springvuejsbackend.dto.ErrorResponseDTO;
+import com.duongnv.springvuejsbackend.dto.ErrorDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,15 +54,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 }
             } else {
                 logger.warn("JWT Token does not begin with Bearer String");
-//            Map<String, String> error  = new HashMap<>();
-//            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-////        System.out.println(authException);
-////        System.out.println(authException.getMessage());
-//            error.put("message", "Unauthorize");
-//            new ObjectMapper().writeValue(response.getOutputStream(),
-//                    new ErrorResponseDTO());
-//            chain.doFilter(request, response);
-//            return;
             }
 
             System.out.println("94 đến đây");
@@ -95,12 +86,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             System.out.println("113 vào đây");
             chain.doFilter(request, response);
         } catch (Exception e) {
+            logger.error(e);
             System.out.println(e.getMessage());
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            ErrorResponseDTO responseDTO = new ErrorResponseDTO(
-                    "Unauthorize",
-                    HttpStatus.UNAUTHORIZED.value(),
-                    System.currentTimeMillis()
+            ErrorDTO responseDTO = new ErrorDTO(
+                    "Không có quyền truy cập",
+                    HttpStatus.UNAUTHORIZED.value()
             );
             new ObjectMapper().writeValue(response.getOutputStream(), responseDTO);
         }

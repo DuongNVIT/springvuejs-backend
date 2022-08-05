@@ -21,7 +21,7 @@ public class CategoryController {
 
     @GetMapping("/categories")
     public List<CategoryDTO> getAllCategories() {
-        System.out.println("vào đây");
+        System.out.println("Vào getAllCategories!");
         return categoryService.findAll();
     }
 

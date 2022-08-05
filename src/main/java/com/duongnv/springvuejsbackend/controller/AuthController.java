@@ -1,27 +1,21 @@
 package com.duongnv.springvuejsbackend.controller;
 
-import com.duongnv.springvuejsbackend.dto.RoleDTO;
 import com.duongnv.springvuejsbackend.dto.UserDTO;
-import com.duongnv.springvuejsbackend.entity.BookSlim;
-import com.duongnv.springvuejsbackend.entity.ProductEntity;
-import com.duongnv.springvuejsbackend.entity.RoleEntity;
 import com.duongnv.springvuejsbackend.exception.DuplicateAccountException;
 import com.duongnv.springvuejsbackend.exception.ResponseE;
-import com.duongnv.springvuejsbackend.repository.ProductRepository;
-import com.duongnv.springvuejsbackend.repository.UserRepository;
-import com.duongnv.springvuejsbackend.service.IUserService;
-import com.duongnv.springvuejsbackend.service.impl.UserService;
-import com.duongnv.springvuejsbackend.utils.PasswordUtil;
-import com.duongnv.springvuejsbackend.dto.MailDemo;
 import com.duongnv.springvuejsbackend.exception.UnauthorizeException;
 import com.duongnv.springvuejsbackend.exception.WrongUsernamPasswordException;
+import com.duongnv.springvuejsbackend.repository.ProductRepository;
+import com.duongnv.springvuejsbackend.repository.UserRepository;
 import com.duongnv.springvuejsbackend.security.JwtRequest;
 import com.duongnv.springvuejsbackend.security.JwtResponse;
 import com.duongnv.springvuejsbackend.security.JwtUserDetailsService;
 import com.duongnv.springvuejsbackend.security.JwtUtil;
+import com.duongnv.springvuejsbackend.service.IUserService;
 import com.duongnv.springvuejsbackend.service.impl.SendMailService;
-import org.apache.tomcat.util.json.JSONParser;
+import com.duongnv.springvuejsbackend.utils.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.*;
@@ -29,10 +23,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -101,23 +91,12 @@ public class AuthController {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
             UserDetails userDetails = jwtUserDetailService.loadUserByUsername(request.getUsername());
             UserDTO userDTO = userService.findByUsername(request.getUsername());
-            System.out.println(userDTO.getProducts());
             String token = jwtTokenUtil.generateToken(userDetails);
-            System.out.println(userRepository.findByStartLetter("Nguyễn").getFullname());
-            BookSlim s = productRepository.findById(1l, BookSlim.class);
-            System.out.println("===========");
-            System.out.println(s);
-            List<ProductEntity> products = productRepository.findUserProduct(2l);
-            for (ProductEntity p : products) {
-                System.out.println(p.getName());
-            }
             return ResponseEntity.ok().body(new JwtResponse(userDTO.getId(), userDTO.getRole().getName(), userDTO.getUsername(), token));
-        } catch (BadCredentialsException e) {
+        } catch (BadCredentialsException | UsernameNotFoundException e) {
             throw new WrongUsernamPasswordException("Sai tên đăng nhập hoặc mật khẩu");
         } catch (InsufficientAuthenticationException e) {
-            throw new UnauthorizeException("Unauthorize!");
-        } catch (UsernameNotFoundException e) {
-            throw new WrongUsernamPasswordException("Sai tên đăng nhập hoặc mật khẩu");
+            throw new UnauthorizeException("Không có quyền truy cập!");
         } catch (DisabledException e) {
             throw new Exception("USER_DISABLED", e);
         }
@@ -131,9 +110,9 @@ public class AuthController {
             userService.save(userDTO);
             sendMailService.sendMail(userDTO, pass);
             return ResponseEntity.ok("Đăng ký thành công");
-        } catch (DuplicateAccountException e) {
+        } catch (DataIntegrityViolationException e) {
             System.out.println("Đăng ký lỗi");
-            throw e;
+            throw new DuplicateAccountException("Trùng email hoặc tên đăng nhập!");
         }
     }
 }

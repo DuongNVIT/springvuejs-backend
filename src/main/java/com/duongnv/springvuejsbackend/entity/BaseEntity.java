@@ -22,17 +22,17 @@ public class BaseEntity {
 
     @CreatedDate
     @Column(name = "createddate")
-    protected Timestamp createddate;
+    protected Timestamp createdDate;
 
     @CreatedBy
     @Column(name = "createdby")
-    protected String createdby;
+    protected String createdBy;
 
     @LastModifiedDate
     @Column(name = "modifieddate")
-    protected Timestamp modifieddate;
+    protected Timestamp modifiedDate;
 
     @LastModifiedBy
     @Column(name = "modifiedby")
-    protected String modifiedby;
+    protected String modifiedBy;
 }
