@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
 public class MyExceptionHandler {
@@ -16,34 +18,42 @@ public class MyExceptionHandler {
     private ErrorDTO errorResponse = new ErrorDTO();
 
     @ExceptionHandler(WrongUsernamPasswordException.class)
-    public ResponseEntity<?> wrongUsernamePasswordException(WrongUsernamPasswordException exception) {
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseBody
+    public ErrorDTO wrongUsernamePasswordException(WrongUsernamPasswordException exception) {
         System.out.println("Vao controller advice, sai ten dang nhap");
         errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
         errorResponse.setMessage(exception.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+        return errorResponse;
     }
 
     @ExceptionHandler(InvalidTokenException.class)
-    public ResponseEntity<?> invalidToken(InvalidTokenException exception) {
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseBody
+    public ErrorDTO invalidToken(InvalidTokenException exception) {
         System.out.println("Controller advice, token khong hop le");
         errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
         errorResponse.setMessage(exception.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+        return errorResponse;
     }
 
     @ExceptionHandler(UnauthorizeException.class)
-    public ResponseEntity<?> unauthorize(UnauthorizeException exception) {
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseBody
+    public ErrorDTO unauthorize(UnauthorizeException exception) {
         System.out.println("Controller advice, unauthorize");
         errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
         errorResponse.setMessage(exception.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+        return errorResponse;
     }
 
     @ExceptionHandler(DuplicateAccountException.class)
-    public ResponseEntity<?> duplicateAccount(DuplicateAccountException exception) {
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseBody
+    public ErrorDTO duplicateAccount(DuplicateAccountException exception) {
         System.out.println("Controller advice, duplicate");
         errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
         errorResponse.setMessage(exception.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+        return errorResponse;
     }
 }

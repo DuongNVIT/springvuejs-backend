@@ -14,6 +14,7 @@ import com.duongnv.springvuejsbackend.security.JwtUtil;
 import com.duongnv.springvuejsbackend.service.IUserService;
 import com.duongnv.springvuejsbackend.service.impl.SendMailService;
 import com.duongnv.springvuejsbackend.utils.PasswordUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -66,6 +67,11 @@ public class AuthController {
         return "response status";
     }
 
+    @PostMapping("/duong")
+    public String duong() {
+        return "Duong test";
+    }
+
     @GetMapping("/duong")
     public String test() {
         return "Nguyễn Văn Đương";
@@ -90,6 +96,7 @@ public class AuthController {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
             UserDetails userDetails = jwtUserDetailService.loadUserByUsername(request.getUsername());
+            System.out.println("vào login");
             UserDTO userDTO = userService.findByUsername(request.getUsername());
             String token = jwtTokenUtil.generateToken(userDetails);
             return ResponseEntity.ok().body(new JwtResponse(userDTO.getId(), userDTO.getRole().getName(), userDTO.getUsername(), token));

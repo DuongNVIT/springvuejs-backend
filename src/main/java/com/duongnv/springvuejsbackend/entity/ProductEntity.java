@@ -38,8 +38,7 @@ public class ProductEntity extends BaseEntity{
     private CategoryEntity category;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_product", joinColumns = @JoinColumn(name = "productid"), inverseJoinColumns = @JoinColumn(name = "userid"))
+    @ManyToMany(mappedBy = "products")
     private List<UserEntity> users = new ArrayList<>();
 
 }

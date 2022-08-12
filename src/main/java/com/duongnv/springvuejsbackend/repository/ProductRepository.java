@@ -13,6 +13,8 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
 
     List<ProductEntity> findByCategoryId(Long categoryCode);
 
+    ProductEntity findById(Long id);
+
     @Query("select p from ProductEntity p where p.name like %?1%")
     List<ProductEntity> findByName(String id);
 
