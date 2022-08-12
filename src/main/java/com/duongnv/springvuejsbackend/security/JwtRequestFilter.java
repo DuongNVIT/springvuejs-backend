@@ -30,12 +30,18 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
+        System.out.println(System.currentTimeMillis());
 
         try {
 //            if(request.getServletPath().startsWith("/")) {
 //                chain.doFilter(request, response);
 //                return;
 //            }
+            if(request.getServletPath().startsWith("/api/signin")) {
+                System.out.println("K cần filter");
+                chain.doFilter(request, response);
+                return;
+            }
             final String requestTokenHeader = request.getHeader("Authorization");
 
             String username = null;
@@ -58,9 +64,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             System.out.println("94 đến đây");
             // Once we get the token validate it.
+            HttpWrapper requestWrapper = new HttpWrapper(request);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 System.out.println(71);
                 UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
+                requestWrapper.addParameter("username", userDetails.getUsername());
+                requestWrapper.addParameter("password", "password");
                 System.out.println(73);
                 // if token is valid configure Spring Security to manually set
                 // authentication
@@ -87,6 +96,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             chain.doFilter(request, response);
         } catch (Exception e) {
             logger.error(e);
+            e.printStackTrace();
             System.out.println(e.getMessage());
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             ErrorDTO responseDTO = new ErrorDTO(
