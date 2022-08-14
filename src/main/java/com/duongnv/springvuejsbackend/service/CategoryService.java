@@ -5,7 +5,7 @@ import com.duongnv.springvuejsbackend.entity.CategoryEntity;
 
 import java.util.List;
 
-public interface ICategoryService {
+public interface CategoryService {
     List<CategoryDTO> findAll();
-    CategoryDTO findByCategoryCode(String code);
+    CategoryDTO findByCode(String code);
 }

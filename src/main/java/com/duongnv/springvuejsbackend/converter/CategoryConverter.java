@@ -6,22 +6,34 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CategoryConverter extends Converter<CategoryEntity, CategoryDTO> {
+public class CategoryConverter implements Converter<CategoryEntity, CategoryDTO> {
 
-    private ModelMapper modelMapper = new ModelMapper();
+
+    protected ModelMapper modelMapper = new ModelMapper();
 
     @Override
     public CategoryDTO entityToDTO(CategoryEntity categoryEntity) {
-        return modelMapper.map(categoryEntity, CategoryDTO.class);
+        CategoryDTO categoryDTO = new CategoryDTO();
+        categoryDTO.setId(categoryEntity.getId());
+        categoryDTO.setName(categoryEntity.getName());
+        categoryDTO.setCode(categoryEntity.getCode());
+        return categoryDTO;
     }
 
     @Override
     public CategoryEntity dtoToEntity(CategoryDTO categoryDTO) {
-        return modelMapper.map(categoryDTO, CategoryEntity.class);
+        CategoryEntity categoryEntity = new CategoryEntity();
+        categoryEntity.setId(categoryDTO.getId());
+        categoryEntity.setName(categoryDTO.getName());
+        categoryEntity.setCode(categoryDTO.getCode());
+        return categoryEntity;
     }
 
     @Override
-    public CategoryEntity entityToEntity(CategoryEntity categoryEntity, CategoryDTO categoryDTO) {
-        return modelMapper.map(categoryDTO, CategoryEntity.class);
+    public CategoryEntity entityToEntity(CategoryEntity oldCategoryEntity, CategoryDTO categoryDTO) {
+        oldCategoryEntity.setId(categoryDTO.getId());
+        oldCategoryEntity.setName(categoryDTO.getName());
+        oldCategoryEntity.setCode(categoryDTO.getCode());
+        return oldCategoryEntity;
     }
 }

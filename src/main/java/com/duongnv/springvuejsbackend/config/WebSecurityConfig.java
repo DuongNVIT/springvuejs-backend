@@ -54,24 +54,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        // We don't need CSRF for this example
-        httpSecurity
-//                .cors().and()
-                .csrf().disable()
-                // dont authenticate this particular request
-                .authorizeRequests().antMatchers("/login", "/api/signin", "/api/signup", "/", "/api/categories/**", "/api/products/**").permitAll().
-                // all other requests need to be authenticated
-                anyRequest().authenticated().and().
-                // make sure we use stateless session; session won't be used to
-                // store user's state.
-                        exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .and().sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-        // Add a filter to validate the tokens with every request
-//        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-        httpSecurity.addFilterBefore(new CustomUPAFilter(authenticationManagerBean()), UsernamePasswordAuthenticationFilter.class);
-        httpSecurity.addFilterBefore(jwtRequestFilter, CustomUPAFilter.class);
+        String[] notAuthenticateUrl = {
+                "/login",
+                "/api/signin",
+                "/api/signup",
+                "/",
+                "/api/categories/**",
+                "/api/products/**"
+        };
+        httpSecurity.csrf().disable();
+        httpSecurity.authorizeRequests().antMatchers(notAuthenticateUrl).permitAll();
+        httpSecurity.authorizeRequests().anyRequest().authenticated();
+        httpSecurity.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint);
+        httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+//        httpSecurity.addFilterBefore(new CustomUPAFilter(authenticationManagerBean()), UsernamePasswordAuthenticationFilter.class);
+//        httpSecurity.addFilterBefore(jwtRequestFilter, CustomUPAFilter.class);
         final String corsOrigin="http://localhost:4000";
         httpSecurity.addFilterBefore(new CorsFilter(corsConfigurationSource(corsOrigin)), AbstractPreAuthenticatedProcessingFilter.class);
     }

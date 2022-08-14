@@ -14,10 +14,7 @@ public class ProductDTO extends AbstractDTO{
     private int newPrice;
     private String thumbnail;
     private String rate;
-    private CategoryDTO category;
     private String categoryCode;
-
-    @Value("#{target.status.toString()}")
     private String status;
     private Long statusId;
 }

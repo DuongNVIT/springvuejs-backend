@@ -4,7 +4,6 @@ import com.duongnv.springvuejsbackend.converter.CategoryConverter;
 import com.duongnv.springvuejsbackend.dto.CategoryDTO;
 import com.duongnv.springvuejsbackend.entity.CategoryEntity;
 import com.duongnv.springvuejsbackend.repository.CategoryRepository;
-import com.duongnv.springvuejsbackend.service.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CategoryService implements ICategoryService {
+public class CategoryServiceImpl implements com.duongnv.springvuejsbackend.service.CategoryService {
 
     @Autowired
     private CategoryConverter categoryConverter;
@@ -23,15 +22,15 @@ public class CategoryService implements ICategoryService {
     @Override
     public List<CategoryDTO> findAll() {
         List<CategoryEntity> categoryEntities = categoryRepository.findAll();
-        List<CategoryDTO> categoryDTOS = new ArrayList<>();
+        List<CategoryDTO> categoryDTOs = new ArrayList<>();
         for(CategoryEntity category : categoryEntities) {
-            categoryDTOS.add(categoryConverter.entityToDTO(category));
+            categoryDTOs.add(categoryConverter.entityToDTO(category));
         }
-        return categoryDTOS;
+        return categoryDTOs;
     }
 
     @Override
-    public CategoryDTO findByCategoryCode(String code) {
+    public CategoryDTO findByCode(String code) {
         return categoryConverter.entityToDTO(categoryRepository.findByCode(code));
     }
 

@@ -1,5 +1,6 @@
 package com.duongnv.springvuejsbackend.security;
 
+import com.duongnv.springvuejsbackend.exception.InvalidTokenException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -53,9 +54,14 @@ public class JwtUtil implements Serializable {
         return doGenerateToken(claims, userDetails.getUsername());
     }
 
-    public boolean validateToken(String token, UserDetails userDetails) {
+    public void validateToken(String token, UserDetails userDetails) {
         String username = getUsernameFromToken(token);
-        return username.equals(userDetails.getUsername())
+        boolean isTokenValid = username.equals(userDetails.getUsername())
                 && !isTokenExpired(token);
+        if(isTokenValid) {
+            return;
+        } else {
+            throw new InvalidTokenException("Token không hợp lệ!");
+        }
     }
 }
