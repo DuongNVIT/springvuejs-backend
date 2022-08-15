@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoleDTO {
-    private Long id = 2l;
-    private String name = "User";
-    private String code = "user";
+public class RoleDTO extends AbstractDTO{
+    private String name;
+    private String code;
 }

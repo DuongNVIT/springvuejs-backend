@@ -1,24 +1,52 @@
 package com.duongnv.springvuejsbackend.converter;
 
 import com.duongnv.springvuejsbackend.dto.ProductDTO;
+import com.duongnv.springvuejsbackend.entity.CategoryEntity;
 import com.duongnv.springvuejsbackend.entity.ProductEntity;
+import com.duongnv.springvuejsbackend.repository.CategoryRepository;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ProductConverter extends Converter<ProductEntity, ProductDTO> {
+public class ProductConverter implements Converter<ProductEntity, ProductDTO> {
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    protected ModelMapper modelMapper = new ModelMapper();
     @Override
     public ProductDTO entityToDTO(ProductEntity productEntity) {
-        return modelMapper.map(productEntity, ProductDTO.class);
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setId(productEntity.getId());
+        productDTO.setName(productEntity.getName());
+        productDTO.setOldPrice(productEntity.getOldPrice());
+        productDTO.setNewPrice(productEntity.getNewPrice());
+        productDTO.setThumbnail(productEntity.getThumbnail());
+        productDTO.setCategoryCode(productEntity.getCategory().getCode());
+        return productDTO;
     }
 
     @Override
     public ProductEntity dtoToEntity(ProductDTO productDTO) {
-        return modelMapper.map(productDTO, ProductEntity.class);
+        ProductEntity productEntity = new ProductEntity();
+        productEntity.setName(productDTO.getName());
+        productEntity.setOldPrice(productDTO.getOldPrice());
+        productEntity.setNewPrice(productDTO.getNewPrice());
+        productEntity.setThumbnail(productDTO.getThumbnail());
+        CategoryEntity categoryEntity = categoryRepository.findByCode(productDTO.getCategoryCode());
+        productEntity.setCategory(categoryEntity);
+        return productEntity;
     }
 
     @Override
     public ProductEntity entityToEntity(ProductEntity productEntity, ProductDTO productDTO) {
-        return null;
+        productEntity.setName(productDTO.getName());
+        productEntity.setThumbnail(productDTO.getThumbnail());
+        productEntity.setOldPrice(productDTO.getOldPrice());
+        productEntity.setNewPrice(productDTO.getNewPrice());
+        CategoryEntity categoryEntity = categoryRepository.findByCode(productDTO.getCategoryCode());
+        productEntity.setCategory(categoryEntity);
+        return productEntity;
     }
 }

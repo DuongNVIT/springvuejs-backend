@@ -22,11 +22,13 @@ public class UserService implements IUserService {
     @Override
     public UserEntity save(UserDTO userDTO) {
         System.out.println("Lưu người dùng");
+        System.out.println(userConverter.dtoToEntity(userDTO));
         return userRepository.save(userConverter.dtoToEntity(userDTO));
     }
 
     @Override
     public UserDTO findByUsername(String username) {
+
         return userConverter.entityToDTO(userRepository.findByUsername(username));
     }
 }

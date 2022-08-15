@@ -27,7 +27,7 @@ public class UserEntity extends BaseEntity{
     @Column(name = "status")
     private int status;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "roleid")
     @JsonIgnore
     private RoleEntity role;

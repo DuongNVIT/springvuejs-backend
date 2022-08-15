@@ -3,10 +3,12 @@ package com.duongnv.springvuejsbackend.controller;
 import com.duongnv.springvuejsbackend.dto.ProductDTO;
 import com.duongnv.springvuejsbackend.dto.UserDTO;
 import com.duongnv.springvuejsbackend.entity.ProductEntity;
-import com.duongnv.springvuejsbackend.entity.ProductStatusEntity;
 import com.duongnv.springvuejsbackend.entity.UserEntity;
 import com.duongnv.springvuejsbackend.entity.UserProductEntity;
-import com.duongnv.springvuejsbackend.repository.*;
+import com.duongnv.springvuejsbackend.repository.ProductProjection;
+import com.duongnv.springvuejsbackend.repository.ProductRepository;
+import com.duongnv.springvuejsbackend.repository.UserProductRepository;
+import com.duongnv.springvuejsbackend.repository.UserRepository;
 import com.duongnv.springvuejsbackend.security.JwtUtil;
 import com.duongnv.springvuejsbackend.service.CartService;
 import com.duongnv.springvuejsbackend.service.impl.UserService;
@@ -37,7 +39,7 @@ public class CartController {
     private ProductRepository productRepository;
 
     @Autowired
-    private ProductStatusRepository productStatusRepository;
+    private CartService cartService;
 
     @GetMapping("/cart/{statusid}")
     public List<ProductProjection> getCart(HttpServletRequest request, @PathVariable(value = "statusid", required = false   ) Long statusId) {
@@ -56,11 +58,14 @@ public class CartController {
         String username = jwtUtil.getUsernameFromToken(token);
         UserEntity user = userRepository.findByUsername(username);
         ProductEntity product = productRepository.findById(Long.parseLong(productId.toString()));
+        System.out.println("Bắt đầu thêm");
+        System.out.println(user.getFullName());
+        System.out.println(product.getName());
         UserProductEntity userProduct = new UserProductEntity();
-//        ProductStatusEntity productStatus = productStatusRepository.findById(1l);
-//        userProduct.setProductStatus(productStatus);
+        userProduct.setId(1l);
         userProduct.setUserId(user.getId());
         userProduct.setProductId(productId);
+//        userProduct.setSta("Save or update");
         userProductRepository.save(userProduct);
         return "Add to cart thành công";
    }

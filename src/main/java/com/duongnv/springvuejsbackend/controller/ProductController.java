@@ -6,8 +6,8 @@ import com.duongnv.springvuejsbackend.dto.CategoryDTO;
 import com.duongnv.springvuejsbackend.dto.ProductDTO;
 import com.duongnv.springvuejsbackend.entity.ProductEntity;
 import com.duongnv.springvuejsbackend.repository.ProductRepository;
-import com.duongnv.springvuejsbackend.service.impl.CategoryService;
-import com.duongnv.springvuejsbackend.service.impl.ProductService;
+import com.duongnv.springvuejsbackend.service.CategoryService;
+import com.duongnv.springvuejsbackend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -41,34 +41,22 @@ public class ProductController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<ProductEntity> pageL = null;
-        System.out.println(page);
-        System.out.println(size);
-        pageL = productRepository.findAll(pageable);
-        System.out.println(pageL.getTotalElements());
-        System.out.println(pageL.getContent());
-        System.out.println();
-        return pageL.getContent();
+        return productService.findAll(pageable);
     }
 
     @GetMapping("/products/{category}")
-    public List<ProductEntity> getProducts(@PathVariable String category) {
-        CategoryDTO categoryDTO = categoryService.findByCategoryCode(category);
-        return productService.findByCategoryId(categoryDTO.getId());
+    public List<ProductEntity> getProducts(
+            @PathVariable String category,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        CategoryDTO categoryDTO = categoryService.findByCode(category);
+        Pageable pageable = PageRequest.of(page, size);
+        return productService.findByCategoryId(categoryDTO.getId(), pageable);
     }
 
     @PostMapping("/products")
-    public ProductDTO createProducts(@RequestBody ProductDTO productDTO) {
-        System.out.println(58);
-        CategoryDTO category = categoryService.findByCategoryCode(productDTO.getCategoryCode());
-        ProductEntity product = new ProductEntity();
-        product.setName(productDTO.getName());
-        product.setNewPrice(productDTO.getNewPrice());
-        product.setOldPrice(productDTO.getOldPrice());
-        product.setCategory(categoryConverter.dtoToEntity(category));
-        product.setThumbnail((productDTO.getThumbnail()));
-        product = productRepository.save(product);
-        return productConverter.entityToDTO(product);
+    public void createProducts(@RequestBody ProductDTO productDTO) {
+        productService.save(productDTO);
     }
 
     @GetMapping("/products/search/{name}")
