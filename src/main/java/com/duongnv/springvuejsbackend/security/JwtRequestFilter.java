@@ -61,11 +61,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         try {
             String token = getTokenFromHeader(request);
+            System.out.println("64 " + token);
             UserDetails userDetails = getUserFromToken(token);
             jwtTokenUtil.validateToken(token, userDetails);
             saveToSecurityContext(userDetails, request);
         } catch (Exception exception) {
             logger.error("Invalid token");
+            exception.printStackTrace();
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             ErrorResponseDTO responseDTO = new ErrorResponseDTO(
                     "Không có quyền truy cập, token không hợp lệ",
@@ -83,13 +85,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             String token = authorizationHeader.substring("Bearer ".length());
             return token;
         } else {
+            System.out.println("86 token khong hop le");
             throw new InvalidTokenException("Token does not begin with bearer!");
         }
     }
 
     private UserDetails getUserFromToken(String token) {
         String username = jwtTokenUtil.getUsernameFromToken(token);
+        System.out.println(94 + " " + username);
         UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(username);
+        System.out.println(userDetails);
         return userDetails;
     }
 

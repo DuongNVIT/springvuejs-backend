@@ -20,6 +20,7 @@ public class UploadFileController {
             System.out.println("Vào upload fiele");
             return amazonService.uploadFile(file);
         } catch (Exception exception) {
+            exception.printStackTrace();
             throw new UploadFileException("Upload file error!");
         }
     }

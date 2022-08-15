@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import java.sql.Timestamp;
 
 public interface ProductProjection {
+
     Long getId();
     Timestamp getCreatedDate();
     String getCreatedBy();
@@ -17,4 +18,13 @@ public interface ProductProjection {
 
     @Value("#{target.status.toString()}")
     String getStatus();
+
+    @Value("#{target.userProductId}")
+    Long getUserProductId();
+
+    @Value("#{target.username}")
+    String getUsername();
+
+    @Value("#{target.statusId}")
+    Long getStatusId();
 }

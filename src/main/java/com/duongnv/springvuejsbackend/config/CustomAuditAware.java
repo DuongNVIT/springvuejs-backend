@@ -14,14 +14,16 @@ public class CustomAuditAware implements AuditorAware<String> {
     public Optional<String> getCurrentAuditor() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+
+        System.out.println(authentication);
+        System.out.println(authentication.getPrincipal());
+
         if (authentication == null || !authentication.isAuthenticated()) {
             return null;
         }
         if(authentication.getPrincipal().toString().equals("anonymousUser")) {
             return null;
         }
-        System.out.println(authentication);
-        System.out.println(authentication.getPrincipal());
 
         return Optional.of(((UserDetails) authentication.getPrincipal()).getUsername());
     }

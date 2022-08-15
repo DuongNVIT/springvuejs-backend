@@ -65,8 +65,4 @@ public class ProductController {
         return productRepository.findByName(name);
     }
 
-    @GetMapping("/products/cart/{userid}")
-    public List<ProductEntity> getCart(@PathVariable Long userid) {
-        return productRepository.findUserProduct(userid);
-    }
 }

@@ -17,4 +17,5 @@ public class ProductDTO extends AbstractDTO{
     private String categoryCode;
     private String status;
     private Long statusId;
+    private Long userId;
 }
