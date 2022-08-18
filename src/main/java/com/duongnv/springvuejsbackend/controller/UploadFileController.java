@@ -1,18 +1,21 @@
 package com.duongnv.springvuejsbackend.controller;
 
 import com.duongnv.springvuejsbackend.exception.UploadFileException;
+import com.duongnv.springvuejsbackend.service.UploadFileService;
 import com.duongnv.springvuejsbackend.service.impl.UploadFileServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api")
 @CrossOrigin
+@Transactional
 public class UploadFileController {
 
     @Autowired
-    private UploadFileServiceImpl amazonService;
+    private UploadFileService amazonService;
 
     @PostMapping("/upload")
     public String uploadFile(@RequestPart("file") MultipartFile file) {

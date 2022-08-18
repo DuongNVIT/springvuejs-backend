@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin
 @Slf4j
 public class AuthController {
 
@@ -73,6 +72,7 @@ public class AuthController {
         } catch (InsufficientAuthenticationException e) {
             throw new UnauthorizeException("Không có quyền truy cập!");
         } catch (Exception e) {
+            e.printStackTrace();
             log.error("Error login!");
             throw new UnknowException("Unknow exception!");
         }

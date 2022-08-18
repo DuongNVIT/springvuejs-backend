@@ -58,6 +58,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         System.out.println("Phải jwt filter");
         System.out.println(request.getRequestURI());
+        System.out.println("@@@@@@@@@@@@@");
+        System.out.println();
+        System.out.println(request.getDispatcherType());
 
         try {
             String token = getTokenFromHeader(request);

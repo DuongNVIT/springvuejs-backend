@@ -2,6 +2,8 @@ package com.duongnv.springvuejsbackend.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
+import org.hibernate.proxy.LazyInitializer;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -10,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "user")
 @Data
-public class UserEntity extends BaseEntity{
+public class UserEntity extends BaseEntity {
 
     @Column(name = "username")
     private String username;
@@ -27,7 +29,7 @@ public class UserEntity extends BaseEntity{
     @Column(name = "status")
     private int status;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "roleid")
     @JsonIgnore
     private RoleEntity role;
@@ -42,4 +44,5 @@ public class UserEntity extends BaseEntity{
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_product", joinColumns = @JoinColumn(name = "userid"), inverseJoinColumns = @JoinColumn(name = "productid"))
     private List<ProductEntity> products = new ArrayList<>();
+
 }

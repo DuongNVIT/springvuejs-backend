@@ -9,6 +9,7 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
+import com.duongnv.springvuejsbackend.service.UploadFileService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,7 +22,7 @@ import java.io.IOException;
 import java.util.Date;
 
 @Service
-public class UploadFileServiceImpl {
+public class UploadFileServiceImpl implements UploadFileService {
 
     private AmazonS3 amazonS3;
 
@@ -66,6 +67,7 @@ public class UploadFileServiceImpl {
                 .withCannedAcl(CannedAccessControlList.PublicRead)));
     }
 
+    @Override
     public String uploadFile(MultipartFile multipartFile) throws IOException {
         String fileUrl = "";
         File file = null;
