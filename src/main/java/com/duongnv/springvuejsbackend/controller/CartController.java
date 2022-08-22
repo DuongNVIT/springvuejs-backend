@@ -16,12 +16,17 @@ import com.duongnv.springvuejsbackend.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api")
 public class CartController {
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
     private UserProductRepository userProductRepository;
@@ -58,17 +63,11 @@ public class CartController {
             String token = jwtUtil.getTokenFromHeader(request);
             String username = jwtUtil.getUsernameFromToken(token);
             UserEntity user = userRepository.findByUsername(username);
-            ProductEntity product = productRepository.findById(Long.parseLong(productId.toString()));
-            System.out.println("Bắt đầu thêm");
-            System.out.println(user.getFullName());
-            System.out.println(product.getName());
+            System.out.println("@@@@@@#######$$$$$$");
             UserProductEntity userProduct = new UserProductEntity();
-            userProduct.setUserId(user.getId());
-            userProduct.setProductId(productId);
-            ProductStatusEntity productStatusEntity = new ProductStatusEntity();
-            productStatusEntity.setId(1l);
-            productStatusEntity.setName("Trong giỏ hàng");
-            userProduct.setProductStatus(productStatusEntity);
+            userProduct.setUserEntity(entityManager.getReference(UserEntity.class, user.getId()));
+            userProduct.setProductEntity(entityManager.getReference(ProductEntity.class, productId));
+            userProduct.setProductStatusEntity(entityManager.getReference(ProductStatusEntity.class, 1l));
             userProductRepository.save(userProduct);
             return "Add to cart thành công";
         } catch (Exception exception) {

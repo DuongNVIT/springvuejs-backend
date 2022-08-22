@@ -8,12 +8,16 @@ import com.duongnv.springvuejsbackend.repository.CategoryRepository;
 import com.duongnv.springvuejsbackend.repository.ProductRepository;
 import com.duongnv.springvuejsbackend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class ProductServiceImpl implements ProductService {
 
     @Autowired
@@ -31,8 +35,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductEntity> findAll(org.springframework.data.domain.Pageable pageable) {
-        return productRepository.findAll(pageable).getContent();
+    public List<ProductDTO> findAll(org.springframework.data.domain.Pageable pageable) {
+        Page<ProductEntity> page = productRepository.findAll(pageable);
+        List<ProductEntity> productEntities = page.getContent();
+        List<ProductDTO> productDTOS = new ArrayList<>();
+        for(ProductEntity productEntity : productEntities) {
+            ProductDTO productDTO = productConverter.entityToDTO(productEntity);
+            productDTO.setTotalItem(page.getTotalElements());
+            productDTOS.add(productDTO);
+        }
+        return productDTOS;
     }
 
     @Override
@@ -46,6 +58,12 @@ public class ProductServiceImpl implements ProductService {
         CategoryEntity categoryEntity = categoryRepository.findByCode(productDTO.getCategoryCode());
         productEntity.setCategory(categoryEntity);
         productRepository.save(productEntity);
+    }
+
+    @Override
+    public void deleteById(Long productId) {
+        Integer x = Integer.valueOf((int) productId.longValue());
+        productRepository.deleteById(productId);
     }
 
 }

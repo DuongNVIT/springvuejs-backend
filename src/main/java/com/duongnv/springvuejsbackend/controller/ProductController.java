@@ -37,7 +37,7 @@ public class ProductController {
     private ProductRepository productRepository;
 
     @GetMapping("/products")
-    public List<ProductEntity> getProducts(
+    public List<ProductDTO> getProducts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -63,6 +63,13 @@ public class ProductController {
     public List<ProductEntity> searchProduct(@PathVariable(required = false) String name) {
 //        if(nam) return productRepository.findAll();
         return productRepository.findByName(name);
+    }
+
+    @DeleteMapping("/products")
+    public void deleteProducts(@RequestParam Long productId) {
+        System.out.println("========= " + productId);
+        productService.deleteById(productId);
+
     }
 
 }

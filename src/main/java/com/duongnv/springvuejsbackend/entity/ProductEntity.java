@@ -38,7 +38,7 @@ public class ProductEntity extends BaseEntity{
     private CategoryEntity category;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "products")
-    private List<UserEntity> users = new ArrayList<>();
+    @OneToMany(mappedBy = "productEntity", cascade = CascadeType.ALL)
+    private List<UserProductEntity> userProductEntities;
 
 }

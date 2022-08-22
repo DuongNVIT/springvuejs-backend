@@ -41,8 +41,6 @@ public class UserEntity extends BaseEntity {
     private String phone;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_product", joinColumns = @JoinColumn(name = "userid"), inverseJoinColumns = @JoinColumn(name = "productid"))
-    private List<ProductEntity> products = new ArrayList<>();
-
+    @OneToMany(mappedBy = "userEntity")
+    private List<UserProductEntity> userProductEntities;
 }

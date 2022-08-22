@@ -9,16 +9,17 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @Repository
-public interface ProductRepository extends JpaRepository<ProductEntity, Integer> {
+public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
     Page<ProductEntity> findByCategoryId(Long categoryCode, Pageable pageable);
 
     Page<ProductEntity> findAll(Pageable pageable);
 
-    ProductEntity findById(Long id);
+//    ProductEntity findById(Long id);
 
     @Query("select p from ProductEntity p where p.name like %?1%")
     List<ProductEntity> findByName(String id);

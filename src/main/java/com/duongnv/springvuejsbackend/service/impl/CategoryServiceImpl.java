@@ -6,11 +6,13 @@ import com.duongnv.springvuejsbackend.entity.CategoryEntity;
 import com.duongnv.springvuejsbackend.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class CategoryServiceImpl implements com.duongnv.springvuejsbackend.service.CategoryService {
 
     @Autowired

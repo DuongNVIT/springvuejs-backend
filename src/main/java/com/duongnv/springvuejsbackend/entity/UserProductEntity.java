@@ -13,14 +13,16 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class UserProductEntity extends BaseEntity{
 
-    @Column(name = "userid")
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userid")
+    private UserEntity userEntity;
 
-    @Column(name = "productid")
-    private Long productId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "productid")
+    private ProductEntity productEntity;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "statusid")
-    private ProductStatusEntity productStatus;
+    private ProductStatusEntity productStatusEntity;
 
 }

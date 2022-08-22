@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Service
-//@Transactional
+@Transactional
 public class JwtUserDetailsService implements UserDetailsService {
 
     @Autowired

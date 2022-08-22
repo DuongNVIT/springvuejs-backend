@@ -12,6 +12,7 @@ import com.amazonaws.services.s3.model.PutObjectResult;
 import com.duongnv.springvuejsbackend.service.UploadFileService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.util.Date;
 
 @Service
+@Transactional
 public class UploadFileServiceImpl implements UploadFileService {
 
     private AmazonS3 amazonS3;

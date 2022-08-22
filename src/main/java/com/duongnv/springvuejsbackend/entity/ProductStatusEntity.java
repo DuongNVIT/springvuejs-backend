@@ -18,8 +18,8 @@ public class ProductStatusEntity extends BaseEntity{
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "productStatus")
     @JsonIgnore
-    private List<UserProductEntity> userProducts;
+    @OneToMany(mappedBy = "productStatusEntity", cascade = CascadeType.ALL)
+    private List<UserProductEntity> userProductEntities;
 
 }
