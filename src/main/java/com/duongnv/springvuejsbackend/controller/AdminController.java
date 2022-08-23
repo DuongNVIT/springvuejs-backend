@@ -1,4 +1,4 @@
-package com.duongnv.springvuejsbackend.config;
+package com.duongnv.springvuejsbackend.controller;
 
 import com.duongnv.springvuejsbackend.entity.ProductStatusEntity;
 import com.duongnv.springvuejsbackend.repository.ProductProjection;

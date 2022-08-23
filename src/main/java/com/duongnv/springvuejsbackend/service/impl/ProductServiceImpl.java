@@ -35,8 +35,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> findAll(org.springframework.data.domain.Pageable pageable) {
+    public List<ProductDTO> findAll(Pageable pageable) {
         Page<ProductEntity> page = productRepository.findAll(pageable);
+        return getProductDTOS(page);
+    }
+
+    private List<ProductDTO> getProductDTOS(Page<ProductEntity> page) {
         List<ProductEntity> productEntities = page.getContent();
         List<ProductDTO> productDTOS = new ArrayList<>();
         for(ProductEntity productEntity : productEntities) {
@@ -48,22 +52,29 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductEntity> findByCategoryId(Long categoryid, Pageable pageable) {
-        return productRepository.findByCategoryId(categoryid, pageable).getContent();
+    public List<ProductDTO> findByCategoryId(Long categoryId, Pageable pageable) {
+        Page<ProductEntity> page = productRepository.findByCategoryId(categoryId, pageable);
+        return getProductDTOS(page);
     }
 
     @Override
-    public void save(ProductDTO productDTO) {
+    public ProductDTO save(ProductDTO productDTO) {
         ProductEntity productEntity = productConverter.dtoToEntity(productDTO);
         CategoryEntity categoryEntity = categoryRepository.findByCode(productDTO.getCategoryCode());
         productEntity.setCategory(categoryEntity);
-        productRepository.save(productEntity);
+        return productConverter.entityToDTO(productRepository.save(productEntity));
     }
 
     @Override
     public void deleteById(Long productId) {
         Integer x = Integer.valueOf((int) productId.longValue());
         productRepository.deleteById(productId);
+    }
+
+    @Override
+    public List<ProductDTO> findAllByName(String productName, Pageable pageable) {
+        Page<ProductEntity> page = productRepository.findByName(productName, pageable);
+        return getProductDTOS(page);
     }
 
 }

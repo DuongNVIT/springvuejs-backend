@@ -30,6 +30,7 @@ public class ProductConverter implements Converter<ProductEntity, ProductDTO> {
     @Override
     public ProductEntity dtoToEntity(ProductDTO productDTO) {
         ProductEntity productEntity = new ProductEntity();
+        productEntity.setId(productDTO.getId());
         productEntity.setName(productDTO.getName());
         productEntity.setOldPrice(productDTO.getOldPrice());
         productEntity.setNewPrice(productDTO.getNewPrice());

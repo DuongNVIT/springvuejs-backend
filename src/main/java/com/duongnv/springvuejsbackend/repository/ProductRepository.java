@@ -19,14 +19,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
     Page<ProductEntity> findAll(Pageable pageable);
 
-//    ProductEntity findById(Long id);
-
-    @Query("select p from ProductEntity p where p.name like %?1%")
-    List<ProductEntity> findByName(String id);
-
-    @PostConstruct
-    static void doSomething() {
-        System.out.println("Tạo product Repo");
-    }
+    @Query("select p from ProductEntity p where p.name like %:productName%")
+    Page<ProductEntity> findByName(@Param("productName") String productName, Pageable pageable);
 
 }

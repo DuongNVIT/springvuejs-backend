@@ -9,7 +9,8 @@ import java.util.List;
 public interface ProductService {
     List<ProductEntity> findAll();
     List<ProductDTO> findAll(Pageable pageable);
-    List<ProductEntity> findByCategoryId(Long categoryid, Pageable pageable);
-    void save(ProductDTO productDTO);
+    List<ProductDTO> findByCategoryId(Long categoryid, Pageable pageable);
+    ProductDTO save(ProductDTO productDTO);
     void deleteById(Long productId);
+    List<ProductDTO> findAllByName(String productName, Pageable pageable);
 }

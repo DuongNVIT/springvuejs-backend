@@ -29,6 +29,15 @@ import java.util.Arrays;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = false, jsr250Enabled = false)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final String[] IGNORED_AUTHENTICATED_URL = {
+            "/login",
+            "/api/signin",
+            "/api/signup",
+            "/",
+            "/api/categories/**",
+            "/api/products/**"
+    };
+
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
@@ -54,16 +63,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        String[] notAuthenticateUrl = {
-                "/login",
-                "/api/signin",
-                "/api/signup",
-                "/",
-                "/api/categories/**",
-                "/api/products/**"
-        };
         httpSecurity.csrf().disable();
-        httpSecurity.authorizeRequests().antMatchers(notAuthenticateUrl).permitAll();
+        httpSecurity.authorizeRequests().antMatchers(IGNORED_AUTHENTICATED_URL).permitAll();
         httpSecurity.authorizeRequests().anyRequest().authenticated();
         httpSecurity.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint);
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

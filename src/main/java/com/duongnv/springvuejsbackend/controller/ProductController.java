@@ -45,7 +45,7 @@ public class ProductController {
     }
 
     @GetMapping("/products/{category}")
-    public List<ProductEntity> getProducts(
+    public List<ProductDTO> getProducts(
             @PathVariable String category,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -55,21 +55,23 @@ public class ProductController {
     }
 
     @PostMapping("/products")
-    public void createProducts(@RequestBody ProductDTO productDTO) {
-        productService.save(productDTO);
+    public ProductDTO createProducts(@RequestBody ProductDTO productDTO) {
+        return productService.save(productDTO);
     }
 
-    @GetMapping("/products/search/{name}")
-    public List<ProductEntity> searchProduct(@PathVariable(required = false) String name) {
-//        if(nam) return productRepository.findAll();
-        return productRepository.findByName(name);
+    @GetMapping("/products/search")
+    public List<ProductDTO> searchProduct(
+            @RequestParam(required = false) String productName,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productService.findAllByName(productName, pageable);
     }
 
-    @DeleteMapping("/products")
-    public void deleteProducts(@RequestParam Long productId) {
+    @DeleteMapping("/products/{productId}")
+    public void deleteProducts(@PathVariable Long productId) {
         System.out.println("========= " + productId);
         productService.deleteById(productId);
-
     }
 
 }

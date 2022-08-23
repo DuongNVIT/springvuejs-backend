@@ -86,6 +86,7 @@ public class AuthController {
             System.out.println("Đăng ký lỗi");
             throw new DuplicateAccountException("Trùng email hoặc tên đăng nhập!");
         } catch (Exception exception) {
+            exception.printStackTrace();
             log.error("Error signup");
             throw new UnknowException("Unknow exception!");
         }

@@ -11,6 +11,7 @@ import com.duongnv.springvuejsbackend.repository.ProductRepository;
 import com.duongnv.springvuejsbackend.repository.UserProductRepository;
 import com.duongnv.springvuejsbackend.repository.UserRepository;
 import com.duongnv.springvuejsbackend.security.JwtUtil;
+import com.duongnv.springvuejsbackend.service.BillService;
 import com.duongnv.springvuejsbackend.service.CartService;
 import com.duongnv.springvuejsbackend.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,9 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
+    @Autowired
+    private BillService billService;
+
     @GetMapping("/cart")
     public List<ProductProjection> getCart(HttpServletRequest request) {
         String token = jwtUtil.getTokenFromHeader(request);
@@ -77,8 +81,9 @@ public class CartController {
    }
 
    @PutMapping("/cart")
-   public void changeStatusItem(@RequestParam Long userProductId, @RequestParam Long statusId) {
-
+   public void order(@RequestBody List<Long> ids) {
+       System.out.println(ids);
+       cartService.order(ids);
    }
 
     @DeleteMapping("/cart")

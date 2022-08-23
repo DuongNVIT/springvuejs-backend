@@ -31,8 +31,24 @@ public interface UserProductRepository extends JpaRepository<UserProductEntity, 
             "and ps.id <> 1", nativeQuery = true)
     List<ProductProjection> findAllProduct();
 
-    @Query(value = "update user_product set statusid = :statusId where id = :userProductId", nativeQuery = true)
     @Modifying
     @Transactional
+    @Query(value = "update user_product set statusid = :statusId where id = :userProductId", nativeQuery = true)
     void updateStatus(@Param("userProductId") Long userProductId, @Param("statusId") Long statusId);
+
+
+    @Modifying
+    @Transactional
+    @Query(value = "update user_product set statusid = 2 where id in :ids", nativeQuery = true)
+    void order(@Param("ids") List<Long> ids);
+
+
+    @Query(value = "select p.*, ps.name as status, u.username as username, ps.id as statusId, up.id as userProductId " +
+            "from user as u, product as p, user_product as up, product_status as ps\n" +
+            "where up.userid = u.id\n" +
+            "and up.productid = p.id\n" +
+            "and up.statusid = ps.id\n" +
+            "and u.username = :username " +
+            "and ps.id <> 1", nativeQuery = true)
+    List<ProductProjection> findAllBills(@Param("username") String username);
 }
