@@ -1,7 +1,7 @@
-package com.duongnv.springvuejsbackend.controller;
+package com.duongnv.springvuejsbackend.controller.web;
 
-import com.duongnv.springvuejsbackend.repository.ProductProjection;
-import com.duongnv.springvuejsbackend.repository.UserProductRepository;
+import com.duongnv.springvuejsbackend.dto.ProductProjection;
+import com.duongnv.springvuejsbackend.exception.UnknowException;
 import com.duongnv.springvuejsbackend.security.JwtUtil;
 import com.duongnv.springvuejsbackend.service.BillService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +30,7 @@ public class BillController {
             return billService.getAllBills(username);
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            throw new UnknowException("Exception in bill controller");
         }
     }
-
-
 }

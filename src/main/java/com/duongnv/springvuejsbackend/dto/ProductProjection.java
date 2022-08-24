@@ -1,4 +1,4 @@
-package com.duongnv.springvuejsbackend.repository;
+package com.duongnv.springvuejsbackend.dto;
 
 import org.springframework.beans.factory.annotation.Value;
 

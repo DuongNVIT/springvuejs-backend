@@ -18,7 +18,7 @@ public class RoleEntity extends BaseEntity{
     @Column(name = "code")
     private String code;
 
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<UserEntity> users = new ArrayList<>();
 }

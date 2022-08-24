@@ -2,11 +2,8 @@ package com.duongnv.springvuejsbackend.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.hibernate.proxy.HibernateProxy;
-import org.hibernate.proxy.LazyInitializer;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -41,6 +38,6 @@ public class UserEntity extends BaseEntity {
     private String phone;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "userEntity")
-    private List<UserProductEntity> userProductEntities;
+    @OneToMany(mappedBy = "userEntity", fetch = FetchType.LAZY)
+    private List<UserProductStatusEntity> userProductEntities;
 }

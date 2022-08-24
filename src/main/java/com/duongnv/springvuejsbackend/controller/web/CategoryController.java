@@ -1,4 +1,4 @@
-package com.duongnv.springvuejsbackend.controller;
+package com.duongnv.springvuejsbackend.controller.web;
 
 import com.duongnv.springvuejsbackend.dto.CategoryDTO;
 import com.duongnv.springvuejsbackend.exception.UnknowException;
@@ -23,10 +23,10 @@ public class CategoryController {
     @GetMapping("/categories")
     public List<CategoryDTO> getAllCategories(HttpServletRequest request) {
         try {
-
             System.out.println("Vào getAllCategories!");
             return categoryService.findAll();
         } catch (Exception exception) {
+            exception.printStackTrace();
             System.out.println("Category controller exception!");
             throw new UnknowException("Category controller!");
         }

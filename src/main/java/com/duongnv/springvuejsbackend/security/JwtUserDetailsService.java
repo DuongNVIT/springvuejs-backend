@@ -27,18 +27,8 @@ public class JwtUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findByUsername(username);
-        System.out.println("==================");
-        System.out.println();
-        System.out.println(userEntity.getClass().getName());
-        System.out.println(Hibernate.isInitialized(userEntity.getRole()));
-        System.out.println(userEntity.getRole().getClass().getName());
-//        System.out.println(userEntity.getRole().getName());
-        System.out.println();
-        System.out.println("==========");
         if(userEntity != null) {
             Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-            System.out.println("Bắt đầu lỗi jwt");
-            // Nó lỗi là do
             authorities.add(new SimpleGrantedAuthority(userEntity.getRole().getName()));
             return new User(userEntity.getUsername(), userEntity.getPassword(), authorities);
         } else {

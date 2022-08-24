@@ -48,8 +48,6 @@ public class UploadFileServiceImpl implements UploadFileService {
                 .withRegion("ap-southeast-1")
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))
                 .build();
-        System.out.println(endPointURL);
-        System.out.println(accessKey);
     }
 
     private File convertMultipartFileToFile(MultipartFile multipartFile) throws IOException {

@@ -1,4 +1,4 @@
-package com.duongnv.springvuejsbackend.controller;
+package com.duongnv.springvuejsbackend.controller.admin;
 
 import com.duongnv.springvuejsbackend.exception.UploadFileException;
 import com.duongnv.springvuejsbackend.service.UploadFileService;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/admin")
 @CrossOrigin
 @Transactional
 public class UploadFileController {

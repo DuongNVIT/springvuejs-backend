@@ -6,10 +6,8 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface ProductStatusRepository extends JpaRepository<ProductStatusEntity, Integer> {
-    ProductStatusEntity findById(Long id);
+public interface ProductStatusRepository extends JpaRepository<ProductStatusEntity, Long> {
 
-    ProductStatusEntity findByName(String statusName);
 }
 
 

@@ -3,14 +3,11 @@ package com.duongnv.springvuejsbackend.security;
 import com.duongnv.springvuejsbackend.dto.ErrorResponseDTO;
 import com.duongnv.springvuejsbackend.exception.InvalidTokenException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -57,14 +54,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
 
         System.out.println("Phải jwt filter");
-        System.out.println(request.getRequestURI());
-        System.out.println("@@@@@@@@@@@@@");
-        System.out.println();
-        System.out.println(request.getDispatcherType());
 
         try {
             String token = getTokenFromHeader(request);
-            System.out.println("64 " + token);
             UserDetails userDetails = getUserFromToken(token);
             jwtTokenUtil.validateToken(token, userDetails);
             saveToSecurityContext(userDetails, request);

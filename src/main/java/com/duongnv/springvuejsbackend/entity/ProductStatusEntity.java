@@ -19,7 +19,7 @@ public class ProductStatusEntity extends BaseEntity{
     private String name;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "productStatusEntity", cascade = CascadeType.ALL)
-    private List<UserProductEntity> userProductEntities;
+    @OneToMany(mappedBy = "productStatusEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<UserProductStatusEntity> userProductStatusEntities;
 
 }

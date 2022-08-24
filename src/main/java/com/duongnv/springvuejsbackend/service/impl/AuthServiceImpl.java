@@ -32,7 +32,7 @@ public class AuthServiceImpl implements AuthService {
     private JwtUtil jwtUtil;
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @Autowired
     private PasswordUtil passwordUtil;
@@ -60,11 +60,6 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public ResponseEntity<?> signUp(UserDTO userDTO) {
         String pass = passwordUtil.generateRandomPassword();
-        RoleDTO roleDTO = new RoleDTO();
-        roleDTO.setId(2l);
-        roleDTO.setName("User");
-        roleDTO.setCode("user");
-        userDTO.setRole(roleDTO);
         userDTO.setPassword(passwordEncoder.encode(pass));
         sendMailService.sendMail(userDTO, pass);
         userService.save(userDTO);

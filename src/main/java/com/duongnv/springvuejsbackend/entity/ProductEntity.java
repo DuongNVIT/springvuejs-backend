@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -33,12 +32,12 @@ public class ProductEntity extends BaseEntity{
     @Column(name = "rate")
     private Integer rate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoryid")
     private CategoryEntity category;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "productEntity", cascade = CascadeType.ALL)
-    private List<UserProductEntity> userProductEntities;
+    @OneToMany(mappedBy = "productEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<UserProductStatusEntity> userProductStatusEntities;
 
 }

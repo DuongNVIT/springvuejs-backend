@@ -1,7 +1,7 @@
 package com.duongnv.springvuejsbackend.repository;
 
-import com.duongnv.springvuejsbackend.dto.ProductDTO;
-import com.duongnv.springvuejsbackend.entity.UserProductEntity;
+import com.duongnv.springvuejsbackend.dto.ProductProjection;
+import com.duongnv.springvuejsbackend.entity.UserProductStatusEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,10 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-public interface UserProductRepository extends JpaRepository<UserProductEntity, Long> {
+public interface UserProductStatusRepository extends JpaRepository<UserProductStatusEntity, Long> {
 
     @Query(value = "select p.*, ps.name as status, u.username as username, ps.id as statusId, up.id as userProductId " +
-            "from user as u, product as p, user_product as up, product_status as ps\n" +
+            "from user as u, product as p, user_product_status as up, product_status as ps\n" +
             "where up.userid = u.id\n" +
             "and up.productid = p.id\n" +
             "and up.statusid = ps.id\n" +
@@ -24,7 +24,7 @@ public interface UserProductRepository extends JpaRepository<UserProductEntity, 
     List<ProductProjection> findAllProductInCart(@Param("userId") Long userId, @Param("statusId") Long statusId);
 
     @Query(value = "select p.*, u.username as username, ps.name as status, ps.id as statusId, up.id as userProductId " +
-            "from user as u, product as p, user_product as up, product_status as ps\n" +
+            "from user as u, product as p, user_product_status as up, product_status as ps\n" +
             "where up.userid = u.id\n" +
             "and up.productid = p.id\n" +
             "and up.statusid = ps.id\n" +
@@ -33,18 +33,18 @@ public interface UserProductRepository extends JpaRepository<UserProductEntity, 
 
     @Modifying
     @Transactional
-    @Query(value = "update user_product set statusid = :statusId where id = :userProductId", nativeQuery = true)
+    @Query(value = "update user_product_status set statusid = :statusId where id = :userProductId", nativeQuery = true)
     void updateStatus(@Param("userProductId") Long userProductId, @Param("statusId") Long statusId);
 
 
     @Modifying
     @Transactional
-    @Query(value = "update user_product set statusid = 2 where id in :ids", nativeQuery = true)
+    @Query(value = "update user_product_status set statusid = 2 where id in :ids", nativeQuery = true)
     void order(@Param("ids") List<Long> ids);
 
 
     @Query(value = "select p.*, ps.name as status, u.username as username, ps.id as statusId, up.id as userProductId " +
-            "from user as u, product as p, user_product as up, product_status as ps\n" +
+            "from user as u, product as p, user_product_status as up, product_status as ps\n" +
             "where up.userid = u.id\n" +
             "and up.productid = p.id\n" +
             "and up.statusid = ps.id\n" +
