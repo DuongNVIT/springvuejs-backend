@@ -11,16 +11,19 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class SendMailServiceImpl implements SendMailService {
+
     @Autowired
     private MailSender mailSender;
 
     @Override
-    public void sendMail(UserDTO sendUser, String password) {
+    public void sendMail(UserDTO sendUser) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("nguyenduong985911@gmail.com");
+        message.setFrom("noreply.autoletter.itshop");
         message.setTo(sendUser.getEmail());
         message.setSubject("Xác nhận đăng ký tài khoản ITShop");
-        message.setText("Xin chào " + sendUser.getFullname() + ", mật khẩu của bạn là: " + password);
+        message.setText("Xin chào " + sendUser.getFullname() + ", kích hoạt tài khoản tại đây: " +
+                "http://localhost:4000/active?username=" + sendUser.getUsername() +
+                "&code=" + sendUser.getCode());
         mailSender.send(message);
     }
 }

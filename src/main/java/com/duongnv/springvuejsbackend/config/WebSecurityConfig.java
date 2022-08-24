@@ -1,6 +1,5 @@
 package com.duongnv.springvuejsbackend.config;
 
-import com.duongnv.springvuejsbackend.security.CustomUPAFilter;
 import com.duongnv.springvuejsbackend.security.JwtAuthenticationEntryPoint;
 import com.duongnv.springvuejsbackend.security.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +34,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/signup",
             "/",
             "/api/categories/**",
-            "/api/products/**"
+            "/api/products/**",
+            "/api/active"
     };
+
+    private final String CROSS_ORIGIN_URL = "http://localhost:4000";
 
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -69,12 +71,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint);
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-//        httpSecurity.addFilterBefore(new CustomUPAFilter(authenticationManagerBean()), UsernamePasswordAuthenticationFilter.class);
-//        httpSecurity.addFilterBefore(jwtRequestFilter, CustomUPAFilter.class);
-        final String corsOrigin="http://localhost:4000";
-        httpSecurity.addFilterBefore(new CorsFilter(corsConfigurationSource(corsOrigin)), AbstractPreAuthenticatedProcessingFilter.class);
+        httpSecurity.addFilterBefore(new CorsFilter(corsConfigurationSource(CROSS_ORIGIN_URL)), AbstractPreAuthenticatedProcessingFilter.class);
     }
-
 
     private CorsConfigurationSource corsConfigurationSource(String corsOrigin) {
         CorsConfiguration configuration = new CorsConfiguration();

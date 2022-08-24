@@ -19,6 +19,6 @@ public class CategoryEntity extends BaseEntity{
     private String code;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     List<ProductEntity> products = new ArrayList<>();
 }

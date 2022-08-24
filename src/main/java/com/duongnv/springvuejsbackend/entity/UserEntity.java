@@ -2,11 +2,8 @@ package com.duongnv.springvuejsbackend.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.hibernate.proxy.HibernateProxy;
-import org.hibernate.proxy.LazyInitializer;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -29,7 +26,7 @@ public class UserEntity extends BaseEntity {
     @Column(name = "status")
     private int status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "roleid")
     @JsonIgnore
     private RoleEntity role;
@@ -40,7 +37,10 @@ public class UserEntity extends BaseEntity {
     @Column(name = "phone")
     private String phone;
 
+    @Column(name = "code")
+    private String code;
+
     @JsonIgnore
-    @OneToMany(mappedBy = "userEntity")
-    private List<UserProductEntity> userProductEntities;
+    @OneToMany(mappedBy = "userEntity", fetch = FetchType.LAZY)
+    private List<UserProductStatusEntity> userProductEntities;
 }

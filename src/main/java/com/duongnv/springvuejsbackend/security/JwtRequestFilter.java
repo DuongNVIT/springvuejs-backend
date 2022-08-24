@@ -3,14 +3,11 @@ package com.duongnv.springvuejsbackend.security;
 import com.duongnv.springvuejsbackend.dto.ErrorResponseDTO;
 import com.duongnv.springvuejsbackend.exception.InvalidTokenException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -19,6 +16,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -34,6 +32,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         IGNORED_FILTER_URL.add("/api/signup");
         IGNORED_FILTER_URL.add("/api/products");
         IGNORED_FILTER_URL.add("/api/categories");
+        IGNORED_FILTER_URL.add("/api/active");
     }
 
     @Autowired
@@ -57,14 +56,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
 
         System.out.println("Phải jwt filter");
-        System.out.println(request.getRequestURI());
-        System.out.println("@@@@@@@@@@@@@");
-        System.out.println();
-        System.out.println(request.getDispatcherType());
 
         try {
             String token = getTokenFromHeader(request);
-            System.out.println("64 " + token);
             UserDetails userDetails = getUserFromToken(token);
             jwtTokenUtil.validateToken(token, userDetails);
             saveToSecurityContext(userDetails, request);
@@ -93,10 +87,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
     }
 
-    private UserDetails getUserFromToken(String token) {
+    public UserDetails getUserFromToken(String token) {
         String username = jwtTokenUtil.getUsernameFromToken(token);
         System.out.println(94 + " " + username);
         UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(username);
+        System.out.println("++++++++");
+        System.out.println(userDetails);
+        System.out.println("++++++++++");
         System.out.println(userDetails);
         return userDetails;
     }

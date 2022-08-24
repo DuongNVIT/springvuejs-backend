@@ -1,19 +1,17 @@
-package com.duongnv.springvuejsbackend.controller;
+package com.duongnv.springvuejsbackend.controller.web;
 
-import com.duongnv.springvuejsbackend.dto.ProductDTO;
-import com.duongnv.springvuejsbackend.dto.UserDTO;
+import com.duongnv.springvuejsbackend.dto.ProductProjection;
 import com.duongnv.springvuejsbackend.entity.ProductEntity;
 import com.duongnv.springvuejsbackend.entity.ProductStatusEntity;
 import com.duongnv.springvuejsbackend.entity.UserEntity;
-import com.duongnv.springvuejsbackend.entity.UserProductEntity;
-import com.duongnv.springvuejsbackend.repository.ProductProjection;
+import com.duongnv.springvuejsbackend.entity.UserProductStatusEntity;
 import com.duongnv.springvuejsbackend.repository.ProductRepository;
-import com.duongnv.springvuejsbackend.repository.UserProductRepository;
+import com.duongnv.springvuejsbackend.repository.UserProductStatusRepository;
 import com.duongnv.springvuejsbackend.repository.UserRepository;
 import com.duongnv.springvuejsbackend.security.JwtUtil;
 import com.duongnv.springvuejsbackend.service.BillService;
 import com.duongnv.springvuejsbackend.service.CartService;
-import com.duongnv.springvuejsbackend.service.impl.UserService;
+import com.duongnv.springvuejsbackend.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,13 +28,13 @@ public class CartController {
     private EntityManager entityManager;
 
     @Autowired
-    private UserProductRepository userProductRepository;
+    private UserProductStatusRepository userProductRepository;
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -56,7 +54,6 @@ public class CartController {
         String username = jwtUtil.getUsernameFromToken(token);
         UserEntity userEntity = userRepository.findByUsername(username);
         List<ProductProjection> products = userProductRepository.findAllProductInCart(userEntity.getId(), 1l);
-        System.out.println(products);
         return products;
     }
 
@@ -67,8 +64,7 @@ public class CartController {
             String token = jwtUtil.getTokenFromHeader(request);
             String username = jwtUtil.getUsernameFromToken(token);
             UserEntity user = userRepository.findByUsername(username);
-            System.out.println("@@@@@@#######$$$$$$");
-            UserProductEntity userProduct = new UserProductEntity();
+            UserProductStatusEntity userProduct = new UserProductStatusEntity();
             userProduct.setUserEntity(entityManager.getReference(UserEntity.class, user.getId()));
             userProduct.setProductEntity(entityManager.getReference(ProductEntity.class, productId));
             userProduct.setProductStatusEntity(entityManager.getReference(ProductStatusEntity.class, 1l));
@@ -82,8 +78,12 @@ public class CartController {
 
    @PutMapping("/cart")
    public void order(@RequestBody List<Long> ids) {
-       System.out.println(ids);
-       cartService.order(ids);
+       try {
+           System.out.println(ids);
+           cartService.order(ids);
+       } catch (Exception exception) {
+           exception.printStackTrace();
+       }
    }
 
     @DeleteMapping("/cart")

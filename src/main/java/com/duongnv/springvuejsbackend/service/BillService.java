@@ -1,6 +1,6 @@
 package com.duongnv.springvuejsbackend.service;
 
-import com.duongnv.springvuejsbackend.repository.ProductProjection;
+import com.duongnv.springvuejsbackend.dto.ProductProjection;
 
 import java.util.List;
 

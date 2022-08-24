@@ -1,4 +1,4 @@
-package com.duongnv.springvuejsbackend.controller;
+package com.duongnv.springvuejsbackend.controller.web;
 
 import com.duongnv.springvuejsbackend.converter.CategoryConverter;
 import com.duongnv.springvuejsbackend.converter.ProductConverter;
@@ -16,25 +16,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@RestController("webProductController")
 @RequestMapping("/api")
-@CrossOrigin
 public class ProductController {
-
-    @Autowired
-    private ProductConverter productConverter;
-
-    @Autowired
-    private CategoryConverter categoryConverter;
 
     @Autowired
     private ProductService productService;
 
     @Autowired
     private CategoryService categoryService;
-
-    @Autowired
-    private ProductRepository productRepository;
 
     @GetMapping("/products")
     public List<ProductDTO> getProducts(
@@ -54,11 +44,6 @@ public class ProductController {
         return productService.findByCategoryId(categoryDTO.getId(), pageable);
     }
 
-    @PostMapping("/products")
-    public ProductDTO createProducts(@RequestBody ProductDTO productDTO) {
-        return productService.save(productDTO);
-    }
-
     @GetMapping("/products/search")
     public List<ProductDTO> searchProduct(
             @RequestParam(required = false) String productName,
@@ -66,12 +51,6 @@ public class ProductController {
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         return productService.findAllByName(productName, pageable);
-    }
-
-    @DeleteMapping("/products/{productId}")
-    public void deleteProducts(@PathVariable Long productId) {
-        System.out.println("========= " + productId);
-        productService.deleteById(productId);
     }
 
 }

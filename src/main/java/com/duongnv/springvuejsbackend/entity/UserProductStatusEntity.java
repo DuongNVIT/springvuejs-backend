@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "user_product")
+@Table(name = "user_product_status")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserProductEntity extends BaseEntity{
+public class UserProductStatusEntity extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userid")

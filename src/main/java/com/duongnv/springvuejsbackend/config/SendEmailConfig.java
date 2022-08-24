@@ -44,7 +44,7 @@ public class SendEmailConfig {
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.ssl.enable", isSSL);
         props.put("mail.smtp.from", email);
-//        props.put("mail.debug", "true");
+        props.put("mail.debug", "true");
         return mailSender;
     }
 }

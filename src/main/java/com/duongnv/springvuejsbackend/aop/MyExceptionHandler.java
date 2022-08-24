@@ -3,6 +3,7 @@ package com.duongnv.springvuejsbackend.aop;
 import com.duongnv.springvuejsbackend.dto.ErrorResponseDTO;
 import com.duongnv.springvuejsbackend.exception.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -59,6 +60,17 @@ public class MyExceptionHandler {
     public ErrorResponseDTO unknowError(UnknowException exception) {
         exception.printStackTrace();
         System.out.println("Controller advice, unknow exception!");
+        errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
+        errorResponse.setMessage(exception.getMessage());
+        return errorResponse;
+    }
+
+    @ExceptionHandler(DisableAccountException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseBody
+    public ErrorResponseDTO disableAccount(DisableAccountException exception) {
+        exception.printStackTrace();
+        System.out.println("Controller advice, disable account");
         errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
         errorResponse.setMessage(exception.getMessage());
         return errorResponse;

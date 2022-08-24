@@ -25,6 +25,8 @@ public class UserConverter implements Converter<UserEntity, UserDTO> {
         userDTO.setUsername(userEntity.getUsername());
         userDTO.setFullname(userEntity.getFullName());
         userDTO.setEmail(userEntity.getEmail());
+        userDTO.setCode(userEntity.getCode());
+        userDTO.setStatus(userEntity.getStatus());
         RoleDTO roleDTO = roleConverter.entityToDTO(userEntity.getRole());
         userDTO.setRole(roleDTO);
         return userDTO;
@@ -35,6 +37,8 @@ public class UserConverter implements Converter<UserEntity, UserDTO> {
         UserEntity userEntity = new UserEntity();
         userEntity.setEmail(userDTO.getEmail());
         userEntity.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        userEntity.setCode(userDTO.getCode());
+        userEntity.setStatus(userDTO.getStatus());
         userEntity.setUsername(userDTO.getUsername());
         userEntity.setFullName(userDTO.getFullname());
         RoleEntity roleEntity = roleConverter.dtoToEntity(userDTO.getRole());

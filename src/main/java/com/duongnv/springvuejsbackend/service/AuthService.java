@@ -8,4 +8,5 @@ import org.springframework.http.ResponseEntity;
 public interface AuthService {
     JwtResponse signIn(JwtRequest requestPayload);
     ResponseEntity<?> signUp(UserDTO userDTO);
+    void active(String username, String code);
 }

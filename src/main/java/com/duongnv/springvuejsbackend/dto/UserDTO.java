@@ -11,11 +11,11 @@ import java.util.List;
 @Data
 public class UserDTO extends AbstractDTO{
     private String username;
-    @JsonIgnore
     private String password;
     private String fullname;
     private String email;
-    private int status = 1;
+    private int status;
     private RoleDTO role = new RoleDTO();
+    private String code;
     private List<ProductDTO> products = new ArrayList<>();
 }
